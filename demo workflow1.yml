@@ -1,0 +1,383 @@
+app:
+  description: ''
+  icon: "\U0001F916"
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: demo workflow1
+workflow:
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      id: 1717142217511-source-1717526965627-target
+      source: '1717142217511'
+      sourceHandle: source
+      target: '1717526965627'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: if-else
+      id: 1717526965627-source-1717560821082-target
+      source: '1717526965627'
+      sourceHandle: source
+      target: '1717560821082'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1717560821082-true-1717529491545-target
+      source: '1717560821082'
+      sourceHandle: 'true'
+      target: '1717529491545'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: end
+      id: 1717560821082-false-1717526369704-target
+      source: '1717560821082'
+      sourceHandle: 'false'
+      target: '1717526369704'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: llm
+      id: 1717529491545-source-1717562786177-target
+      source: '1717529491545'
+      sourceHandle: source
+      target: '1717562786177'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: 1717562786177-source-1717574034490-target
+      source: '1717562786177'
+      sourceHandle: source
+      target: '1717574034490'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: llm
+      id: 1717574034490-source-1717574072592-target
+      source: '1717574034490'
+      sourceHandle: source
+      target: '1717574072592'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: input
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: input
+      height: 90
+      id: '1717142217511'
+      position:
+        x: 30
+        y: 291.5
+      positionAbsolute:
+        x: 30
+        y: 291.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: sorry
+        outputs: []
+        selected: false
+        title: End
+        type: end
+      height: 84
+      id: '1717526369704'
+      position:
+        x: 925.590308679082
+        y: 413.87357552315075
+      positionAbsolute:
+        x: 925.590308679082
+        y: 413.87357552315075
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - e63c21fa-d4b2-48a2-b82f-e003ef506721
+        desc: ''
+        multiple_retrieval_config:
+          reranking_model:
+            model: rerank-english-v2.0
+            provider: cohere
+          top_k: 2
+        query_variable_selector:
+        - '1717142217511'
+        - input
+        retrieval_mode: multiple
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params: {}
+            mode: chat
+            name: gpt-3.5-turbo
+            provider: openai
+        title: Knowledge Retrieval
+        type: knowledge-retrieval
+      height: 92
+      id: '1717526965627'
+      position:
+        x: 333
+        y: 291.5
+      positionAbsolute:
+        x: 333
+        y: 291.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1717526965627'
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.2
+            top_k: 2
+          mode: chat
+          name: gemini-1.5-pro-latest
+          provider: google
+        prompt_template:
+        - id: 19fe3777-98b0-4495-b803-5f8918670a11
+          role: system
+          text: just print{{#context#}}
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 98
+      id: '1717529491545'
+      position:
+        x: 925.590308679082
+        y: 286.27043941100163
+      positionAbsolute:
+        x: 925.590308679082
+        y: 286.27043941100163
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        conditions:
+        - comparison_operator: not empty
+          id: '1717560823940'
+          value: ''
+          variable_selector:
+          - '1717526965627'
+          - result
+        desc: ''
+        logical_operator: and
+        selected: false
+        title: IF/ELSE
+        type: if-else
+      height: 126
+      id: '1717560821082'
+      position:
+        x: 636
+        y: 291.5
+      positionAbsolute:
+        x: 636
+        y: 291.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1717529491545'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+            top_k: 2
+          mode: chat
+          name: gemini-1.5-pro-latest
+          provider: google
+        prompt_template:
+        - id: 2540606c-29fc-4e1e-a175-93ada3b4c67a
+          role: system
+          text: "t\u1EA1o quiz d\u1EF1a tr\xEAn {{#context#}}d\u01B0\u1EDBi d\u1EA1\
+            ng b\u1EA3ng g\u1ED3m 30 c\xE2u h\u1ECFi trong \u0111\xF3 30% c\xE2u \u1EDF\
+            \ d\u1EA1ng d\u1EC5[nh\u1EDB-v\u1EADn d\u1EE5ng] v\xE0 40% \u1EDF d\u1EA1\
+            ng kh\xF3[nh\u1EDB-v\u1EADn d\u1EE5ng], v\xE0 30% c\xE2u \u1EDF d\u1EA1\
+            ng kh\xF3[v\u1EADn d\u1EE5ng]. C\xE2u h\u1ECFi quiz(hay c\xF2n g\u1ECD\
+            i l\xE0 question text) PH\u1EA2I SINH c\xE2u  b\u1EB1ng ti\u1EBFng Vi\u1EC7\
+            t 100% KH\xD4NG S\u1EEC D\u1EE4NG TI\u1EBENG ANH v\xE0 \u0111\xE1p \xE1\
+            n(hay c\xF2n g\u1ECDi l\xE0 answer) PH\u1EA2I SINH \u0111\xE1p \xE1n b\u1EB1\
+            ng ti\u1EBFng Vi\u1EC7t 100% KH\xD4NG S\u1EEC D\u1EE4NG TI\u1EBENG ANH.\n\
+            V\xE0 \u0111a d\u1EA1ng c\xE1c d\u1EA1ng c\xE2u h\u1ECFi bao g\u1ED3m\
+            \ c\xE1c lo\u1EA1i nh\u01B0 sau: Multiple Choice question, Multiple Response\
+            \ question\nV\xE0 c\xF3 1 \u0111\xE1p \xE1n \u0111\xFAng trong s\u1ED1\
+            \ 3 \u0111\xE1p \xE1n sai. Vui l\xF2ng k\u1EBB b\u1EA3ng bao g\u1ED3m\
+            \ c\u1ED9t 0: c\u1ED9t s\u1ED1 th\u1EE9 t\u1EF1 (STT), c\u1ED9t 1: Question\
+            \ type, c\u1ED9t 2: Ph\xE2n lo\u1EA1i c\xE2u h\u1ECFi bao g\u1ED3m: c\xE1\
+            c d\u1EA1ng \"d\u1EC5 [nh\u1EDB-hi\u1EC3u]\", \"kh\xF3[nh\u1EDB-v\u1EAD\
+            n d\u1EE5ng]\", \"kh\xF3[v\u1EADn d\u1EE5ng]\". c\u1ED9t 3: Question text(l\xE0\
+            \ c\xE2u h\u1ECFi), c\u1ED9t 4-5-6-7 t\u01B0\u01A1ng \u1EE9ng l\xE0 \u0111\
+            \xE1p \xE1n 1-2-3-4, v\xE0 \u0111\xE1p \xE1n n\xE0o \u0111\xFAng vui l\xF2\
+            ng th\xEAm d\u1EA5u * cho \u0111\xE1p \xE1n \u0111\xF3. "
+        selected: false
+        title: LLM 2
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 98
+      id: '1717562786177'
+      position:
+        x: 1272.804840685511
+        y: 129.46708127357522
+      positionAbsolute:
+        x: 1272.804840685511
+        y: 129.46708127357522
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: google
+        provider_name: google
+        provider_type: builtin
+        selected: false
+        title: GoogleSearch
+        tool_configurations:
+          result_type: link
+        tool_label: GoogleSearch
+        tool_name: google_search
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1717562786177.text#}}'
+        type: tool
+      height: 90
+      id: '1717574034490'
+      position:
+        x: 1625.0301493274867
+        y: 39.714423523232256
+      positionAbsolute:
+        x: 1625.0301493274867
+        y: 39.714423523232256
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1717574034490'
+          - text
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.3
+            top_k: 2
+          mode: chat
+          name: gemini-1.5-pro-latest
+          provider: google
+        prompt_template:
+        - role: system
+          text: "H\xE3y in ra c\xE1c {{#context#}} t\u01B0\u01A1ng \u1EE9ng v\u1EDB\
+            i t\u1EEBng d\xF2ng v\xE0 \u0111\u1EB7t t\xEAn c\u1ED9t l\xE0 reference"
+        selected: false
+        title: LLM 3
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: true
+      height: 98
+      id: '1717574072592'
+      position:
+        x: 1935.7281088610946
+        y: -40.6610908800599
+      positionAbsolute:
+        x: 1935.7281088610946
+        y: -40.6610908800599
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 35.97802493230006
+      y: 204.72195806144498
+      zoom: 0.7464959999999999
